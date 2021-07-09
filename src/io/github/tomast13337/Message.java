@@ -7,7 +7,7 @@ public class Message {
     private String content;
     private long time;
 
-    public Message(String name, String content, int time) {
+    public Message(String name, String content, long time) {
         this.name = name;
         this.content = content;
         this.time = time;
