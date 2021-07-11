@@ -31,7 +31,7 @@ public class Client extends Thread {
             PrintWriter out = new PrintWriter(connection.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
-
+            out.println(name);
             String userInput;
             while ((userInput = stdin.readLine()) != null) {
                 out.println(userInput);
