@@ -7,15 +7,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ServerThread extends Thread {
 
-    PrintWriter out;
-    BufferedReader in;
-    Socket connection;
-    String name;
+    private final PrintWriter out;
+    private final BufferedReader in;
+    private final Socket connection;
+    private String nome = "";
+    private ArrayList<ServerThread> clients;
 
-    public ServerThread(Socket connection) throws IOException {
+    public ServerThread(Socket connection, ArrayList clients) throws IOException {
+        this.clients = clients;
         this.connection = connection;
         this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         this.out = new PrintWriter(connection.getOutputStream(), true);
@@ -23,20 +29,46 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        String inputLine, outputLine;
         try {
+            String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                outputLine = inputLine;
-                if (outputLine.equalsIgnoreCase("/sair"))
-                    Main.logger.info("Cliente desconectado.");
-                break;
+                if (inputLine.equalsIgnoreCase("/sair"))
+                    break;
+
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(new Date());
+                StringBuilder message = new StringBuilder();
+                message.append("[");
+                message.append(calendar.get(Calendar.HOUR_OF_DAY));
+                message.append(":");
+                message.append(calendar.get(Calendar.MINUTE));
+                message.append("][");
+                message.append(nome);
+                message.append("] ");
+                message.append(inputLine);
+                SendToClients(message.toString());
+                Main.logger.info(message.toString());
             }
         } catch (IOException e) {
             Main.logger.info(e.getMessage());
         }
     }
 
-    public void sendMessage(String message) {
-        out.println(message);
+    private void SendToClients(String content) {
+        for (ServerThread client : clients) {
+            client.getOut().println(content);
+        }
+    }
+
+    public PrintWriter getOut() {
+        return this.out;
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public BufferedReader getIn() {
+        return this.in;
     }
 }
