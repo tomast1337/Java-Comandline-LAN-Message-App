@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class Server implements Runnable {
     private final ServerSocket serverSocket;
-    private ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
+    static ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
     private boolean running;
 
 
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         running = false;
-        Main.logger.info("Servidor iniciado na porta " + String.valueOf(port));
+        Main.logger.info("Servidor iniciado na porta " + port);
     }
 
     @Override
@@ -26,10 +26,11 @@ public class Server implements Runnable {
             while (this.running) {
                 Main.logger.info("Servidor pronto para fazer uma nova conexão com clientes...");
                 Socket newConnection = serverSocket.accept();
-                ServerThread newClient = new ServerThread(newConnection, clients);
+                ServerThread newClient = new ServerThread(newConnection);
                 newClient.start();
                 clients.add(newClient);
                 Main.logger.info("Nova conexão feita");
+                System.out.println(clients.toString());
             }
         } catch (IOException e) {
             Main.logger.info(e.getMessage());
