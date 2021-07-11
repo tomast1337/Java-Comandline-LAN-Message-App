@@ -2,7 +2,10 @@ package io.github.tomast13337.Cliente;
 
 import io.github.tomast13337.Main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client extends Thread {
@@ -25,8 +28,14 @@ public class Client extends Thread {
             this.connection = new Socket(address, port);
             Main.logger.info("Conectando com sucesso a " + address + ":" + String.valueOf(port));
             running = true;
-            while (this.running) {
+            PrintWriter out = new PrintWriter(connection.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
+            String userInput;
+            while ((userInput = stdin.readLine()) != null) {
+                out.println(userInput);
+                System.out.println(in.readLine());
             }
         } catch (IOException e) {
             Main.logger.info(e.getMessage());
