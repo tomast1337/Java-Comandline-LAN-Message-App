@@ -1,47 +1,71 @@
 package io.github.tomast13337;
 
+import io.github.tomast13337.Cliente.Client;
+import io.github.tomast13337.Server.Server;
+
+import javax.swing.*;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    private static Server server;
+    static public Logger logger = null;
+
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+        logger = Logger.getLogger("AppLogger");
+        logger.setLevel(Level.INFO);
+    }
+
+    private static Thread server;
     private static Client client;
 
+    private static Scanner input = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Logger logger = Logger.getLogger("AppLogger");
-        logger.setLevel(Level.INFO);
         if (args.length < 1) {
-            logger.info("Numero de argumentos insuficiente");
-            logger.info("O Primeiro argumento deve ser -host ou -cliente");
-        } else {
-            Main main = new Main();
-            if (args[0].equalsIgnoreCase("cliente")) {
-                logger.info("Iniciando no modo cliente");
-                try {
-                    main.runClient();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (args[0].equalsIgnoreCase("cliente/host") || args[0].equalsIgnoreCase("host/cliente") || args[0].equalsIgnoreCase("host")) {
-                logger.info("Iniciando no modo cliente/host");
-                try {
-                    main.runServer();
-                    main.runClient();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                logger.info("Argumento \"" + args[0] + "\" invalido");
+            logger.info("Numero de parâmetros insuficiente");
+            return;
+        }
+        try {
+            switch (args[0].toLowerCase()) {
+                case "cliente":
+                    client();
+                    break;
+                case "servidor":
+                    server();
+                    break;
+                case "cliente/servidor":
+                    serverClient();
+                    break;
+                default:
+                    logger.info("O argumento" + args[0] + " é invalido");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    void runServer() throws IOException {
-        server = new Server(1234, 500);
+    static void server() throws IOException {
+        server = new Thread(new Server(1235));
+        server.start();
     }
 
-    void runClient() throws IOException {
-        client = new Client("", 1234, "", 500);
+    static void client() throws IOException {
+        String address = JOptionPane.showInputDialog("Digite o ip do servidor");
+        String name = JOptionPane.showInputDialog("Digite seu nome");
+        client = new Client(address, 1235, name);
+        client.start();
+        logger.info("Iniciado cliente");
+    }
+
+    static void serverClient() throws IOException {
+        server = new Thread(new Server(1235));
+        server.start();
+        String name = JOptionPane.showInputDialog("Digite seu nome");
+        client = new Client("localhost", 1235, name);
+        client.start();
+        logger.info("Iniciado cliente");
     }
 }
