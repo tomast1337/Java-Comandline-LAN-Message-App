@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class Server implements Runnable {
+public class Server extends Thread {
     private ServerSocket serverSocket;
     private boolean running;
     private ArrayList clientsThreads;
