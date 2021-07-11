@@ -1,6 +1,5 @@
 package io.github.tomast13337.Server;
 
-import io.github.tomast13337.Cliente.Client;
 import io.github.tomast13337.Main;
 
 import java.io.BufferedReader;
