@@ -5,6 +5,7 @@ import io.github.tomast13337.Server.Server;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,22 +22,27 @@ public class Main {
     private static Thread server;
     private static Client client;
 
-    private static Scanner input = new Scanner(System.in);
+    private static final Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
+        InetAddress inetAddress = InetAddress.getLoopbackAddress();
+        System.out.println("IP Address:- " + inetAddress.getHostAddress());
+        System.out.println("Host Name:- " + inetAddress.getHostName());
+
         if (args.length < 1) {
             logger.info("Numero de parâmetros insuficiente");
             return;
         }
         try {
             switch (args[0].toLowerCase()) {
-                case "cliente":
+                case "client":
                     client();
                     break;
-                case "servidor":
+                case "server":
                     server();
                     break;
-                case "cliente/servidor":
+                case "server/client":
+                case "client/server":
                     serverClient();
                     break;
                 default:
