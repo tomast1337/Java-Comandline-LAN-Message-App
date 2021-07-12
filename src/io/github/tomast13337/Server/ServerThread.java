@@ -56,7 +56,6 @@ public class ServerThread extends Thread {
     }
 
     private void SendToClients(String content) {
-        System.out.println(Server.clients.toString());
         for (ServerThread client : Server.clients) {
             client.getOut().println(content);
         }

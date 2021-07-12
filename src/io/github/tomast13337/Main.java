@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    static public Logger logger = null;
+    static public Logger logger;
 
     static {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
@@ -41,7 +41,7 @@ public class Main {
                     serverClient();
                     break;
                 default:
-                    logger.info("O argumento" + args[0] + " é invalido");
+                    logger.info("O argumento " + args[0] + " é invalido");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,9 +65,9 @@ public class Main {
     }
 
     static void serverClient() throws IOException {
-        logger.setLevel(Level.OFF);
         server = new Thread(new Server(1235));
         server.start();
+        logger.setLevel(Level.OFF);
         System.out.println("Digite seu nome");
         String name = input.nextLine();
         client = new Client("localhost", 1235, name);

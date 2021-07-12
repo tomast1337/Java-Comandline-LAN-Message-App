@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Server implements Runnable {
     private final ServerSocket serverSocket;
-    static ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
+    static ArrayList<ServerThread> clients = new ArrayList<>();
     private boolean running;
 
 
@@ -30,7 +30,6 @@ public class Server implements Runnable {
                 newClient.start();
                 clients.add(newClient);
                 Main.logger.info("Nova conexão feita");
-                System.out.println(clients.toString());
             }
         } catch (IOException e) {
             Main.logger.info(e.getMessage());
