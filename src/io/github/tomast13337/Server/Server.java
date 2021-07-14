@@ -12,7 +12,6 @@ public class Server implements Runnable {
     static ArrayList<ServerThread> clients = new ArrayList<>();
     private boolean running;
 
-
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         running = false;
@@ -40,5 +39,14 @@ public class Server implements Runnable {
         running = false;
         serverSocket.close();
         Main.logger.info("Servidor fechado");
+    }
+
+    boolean ExisteNome(String nome) {
+        for (ServerThread client : clients) {
+            if (client.getNome().equals(nome)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
