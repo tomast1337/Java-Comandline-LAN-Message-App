@@ -54,7 +54,6 @@ public class Main {
     }
 
     static void client() throws IOException {
-        logger.setLevel(Level.OFF);
         System.out.println("Digite o ip do servidor");
         String address = input.nextLine();
         System.out.println("Digite seu nome");
@@ -62,16 +61,17 @@ public class Main {
         client = new Client(address, 1235, name);
         client.start();
         logger.info("Iniciado cliente");
+        logger.setLevel(Level.OFF);
     }
 
     static void serverClient() throws IOException {
         server = new Thread(new Server(1235));
         server.start();
-        logger.setLevel(Level.OFF);
         System.out.println("Digite seu nome");
         String name = input.nextLine();
         client = new Client("localhost", 1235, name);
         client.start();
         logger.info("Iniciado cliente");
+        logger.setLevel(Level.OFF);
     }
 }
