@@ -13,7 +13,6 @@ public class Client extends Thread {
     private final String address;
     private final String name;
     private Socket connection;
-    private boolean running;
 
     public Client(String address, int port, String name) throws IOException {
         this.address = address;
@@ -27,7 +26,6 @@ public class Client extends Thread {
         try {
             this.connection = new Socket(address, port);
             Main.logger.info("Conectando com sucesso a " + address + ":" + port);
-            running = true;
             PrintWriter out = new PrintWriter(connection.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
